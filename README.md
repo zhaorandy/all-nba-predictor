@@ -56,40 +56,40 @@ With scikit-learn, I created two types of classifiers: a generic classifier that
 For basic goodness of fit, I performed 10-fold cross-validation to gauge the performance of the models created, which splits the data set into 10 equal sets, and iteratively trains on 9 of the 10 sets, and tests on the remaining set. I then calculated various standard evaluative metrics, specifically accuracy, recall, precision, F1, cross-validation score, log loss, and area under the ROC curve. Accuracy gives us an idea of the percentage of correct predictions the model made, whereas recall and precision indicate the model's ability to predict the positive and negative class respectively. F1 combines these two measures and offers more insight into comparing models. The area under the receiver operating characteristic, or AUC-ROC, is another performance meaasurement that plots recall against (1 - specificity) at various thresholds. The AUC gives us the area under the ROC, essentially gives us the probaability that our model will classify an All-NBA player over a non All-NBA player. Log loss measures the performance of a classification model on a scale of 0 to 1, where 0 represents no log loss and thus a perfect model. Log loss can offer a deeper understanding into the models accuracy, since accuracy is simply the number of correct classifications, whereas log loss incorporates the entropy of the model's predictions. Cross-validation score is important to check for overfitting, which refers to a model becoming too familiar with the training data set, and thus impedes the model's ability to  predict future data. The scores for the model were: 
 
 Scores for SVC_G
-Accuracy score: 0.790
-Recall: 0.806
-Precision: 0.829
-F1: 0.817
-Area under ROC curve: 0.871
-Log loss: 0.449
-Accuracy (cross validation score): 0.822 (+/- 0.050)
+Accuracy score: 0.758
+Recall: 0.724
+Precision: 0.750
+F1: 0.737
+Area under ROC curve: 0.780
+Log loss: 0.602
+Accuracy (cross validation score): 0.694 (+/- 0.040)
 
 Scores for SVC_F
-Accuracy score: 0.804
-Recall: 0.833
-Precision: 0.857
-F1: 0.845
-Area under ROC curve: 0.894
-Log loss: 0.415
-Accuracy (cross validation score): 0.715 (+/- 0.123)
+Accuracy score: 0.786
+Recall: 0.800
+Precision: 0.800
+F1: 0.800
+Area under ROC curve: 0.901
+Log loss: 0.395
+Accuracy (cross validation score): 0.681 (+/- 0.251)
 
 Scores for SVC_C
-Accuracy score: 0.882
+Accuracy score: 0.706
 Recall: 0.778
-Precision: 1.000
-F1: 0.875
-Area under ROC curve: 0.986
-Log loss: 0.383
-Accuracy (cross validation score): 0.700 (+/- 0.196)
+Precision: 0.700
+F1: 0.737
+Area under ROC curve: 0.792
+Log loss: 0.538
+Accuracy (cross validation score): 0.467 (+/- 0.094)
 
 Scores for SVC
-Accuracy score: 0.787
-Recall: 0.750
-Precision: 0.868
-F1: 0.805
-Area under ROC curve: 0.885
-Log loss: 0.413
-Accuracy (cross validation score): 0.785 (+/- 0.086)
+Accuracy score: 0.840
+Recall: 0.875
+Precision: 0.833
+F1: 0.854
+Area under ROC curve: 0.936
+Log loss: 0.341
+Accuracy (cross validation score): 0.840 (+/- 0.062)
 <img src = "Figures/roc.png">
 
 I also plotted confusion matrices for the given models, which help visualize the model's ability to accurately classify an All-NBA player as an All-NBA player and classify a non All-NBA player as not an All-NBA player. 
@@ -98,7 +98,7 @@ I also plotted confusion matrices for the given models, which help visualize the
 <img src = "Figures/SVC_C_cm.png">
 <img src = "Figures/SVC_cm.png">
 
-As we can see, all the models performed fairly well, with decent accuracy scores. All the models had a higher precision score than recall, which suggests that the model can more accurately classify non All-NBA players. The Area under ROC curve was remarkably high, especially for classifying centers. This is likely due to the smaller sample of centers, as well as the similarities amongst centers throughout NBA history. As expected, the classifiers performed slightly better statistically for predicting forwards and centers, roles that have remained somewhat similar throughout history (high in points, rebounds, TS%, but lower in AST), whereas the transformation of guards (from traditional pass first guards such as Stockton to high-volume scorers such as Steph Curry) throughout history made it more difficult for the model to accurately predict. 
+As we can see, all the models performed fairly well, with decent accuracy scores. The positional classifiers actually performed worse than the SVC, likely due to having less training data as a result of dividing up the data set.
 
 Finally, to compare the positional SVM and the positionless SVM, I graphed the probabilities for players predicted by the positional SVM against the positionless SVM.
 <img src = "Figures/proba.png">
@@ -109,23 +109,23 @@ Using both a position-based and positionless SVM classifier, I predicted the pro
 
 Team  | C | F | F | G | G
 ------|---|---|---|---|---
-First Team All-NBA  | Nikola Jokic (0.970) | Giannis Antetokounmpo (0.999) | Kevin Durant (0.952) | Steph Curry (0.967) | James Harden (0.999)
-Second Team All-NBA | Joel Embiid (0.954) | Kawhi Leonard (0.933) | Paul George (0.895) | Damian Lillard (0.947) | Russell Westbrook (0.898)
-Third Team All-NBA | Rudy Gobert (0.833) | LeBron James (0.700) | Blake Griffin (0.666) | Kyrie Irving (0.851) | D'Angelo Russell (0.616)
+First Team All-NBA  | Nikola Jokic (0.966) | Giannis Antetokounmpo (0.999) | Kevin Durant (0.942) | Steph Curry (0.975) | James Harden (0.999)
+Second Team All-NBA | Joel Embiid (0.950) | Kawhi Leonard (0.917) | Paul George (0.887) | Damian Lillard (0.960) | Kyrie Irving (0.898)
+Third Team All-NBA | Rudy Gobert (0.854) | LeBron James (0.707) | Blake Griffin (0.662) | Russell Westbrook (0.849) | Kemba Walker (0.571)
 
 
-Since the All-NBA teams are already out, we know that Kemba Walker ended up with the All-NBA Third Team nod over D'Angelo Russell, and that Paul George and Kevin Durant along with Russell Westbrook and Kyrie Irving should be switched. The difference in predicted probability between Kemba Walker(0.606) and D'Angelo Russell(0.616) was incredibly small, and the model for guards was less accurate than the other models, so seeing slight differences between the team placing is understandable.
+Since the All-NBA teams are already out, we know that Paul George and Kevin Durant should be switched. The model actually predicted that Paul George should be lower than Kawhi Leonard as well. While Kawhi Leonard and Kevin Durant shined on stellar teams, Paul George seemed to be carrying the Thunder through a competitive Western Conference, but unfortunately got injured. The model fails to capture narratives, as Kevin Durant and Kawhi Leonard have been playing at exceptional levels, yet Paul George had recently experienced a surge in production andd value. So, the model believes that Paul George is overhyped.
 
 Finally, I used K-Means clustering to group the players in the test set into four tiers based upon their predicted probabilities. I decided upon four clusters because it was more insightful than three clusters, but implenting more than five clusters began to create singletons. 
 <img src = "Figures/tiers.png">
 
 ### Players in tier 1 included: 
-Nikola Jokic, Giannis Antetokounmpo, Kevin Durant, Steph Curry, James Harden, Joel Embiid, Kawhi Leonard, Paul George, Damian Lillard, Russell Westbrook, Kyrie Irving
+Nikola Jokic, Giannis Antetokounmpo, Kevin Durant, Steph Curry, James Harden, Joel Embiid, Kawhi Leonard, Paul George, Damian Lillard, Russell Westbrook, Kyrie Irving, Rudy Gobert, Nikola Vucevic
 ### Players in tier 2 included: 
-D'Angelo Russell, LeBron James, Blake Griffin, Nikola Vucevic, Karl-Anthony Towns
-### Players in tier 3 included: 
-Kemba Walker, Ben Simmons, Jimmy Butler, Anthony Davis, LaMarcus Aldridge
+LeBron James, Blake Griffin, Karl-Anthony Towns
+### Players in tier 3 included:  
+D'Angelo Russell, Kemba Walker, Anthony Davis, LaMarcus Aldridge
 ### Players in tier 4 included: 
-Kyle Lowry, Victor Oladipo, Klay Thompson, Mike Conley, Bradley Beal, Jrue Holiday, Khris Middleton
+Ben Simmons, Jimmy Butler, Kyle Lowry, Victor Oladipo, Klay Thompson, Mike Conley, Bradley Beal, Jrue Holiday, Khris Middleton
 
 Overall, the exercise helped me gain a greater understanding of data science, and it was very fun to explore basketball analytics. For the future, I can incorporate more models, along with more neatly organizing my code. 
